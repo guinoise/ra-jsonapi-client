@@ -159,7 +159,7 @@ export default (apiUrl, userSettings = {}) => (type, resource, params) => {
         case GET_LIST: {
           return {
             data: response.data.data.map(value => Object.assign(
-              { id: value.id },
+              { id: value.id, relationships: value.relationships                                                     },
               value.attributes,
             )),
             total,
@@ -177,8 +177,26 @@ export default (apiUrl, userSettings = {}) => (type, resource, params) => {
         }
 
         case GET_ONE: {
-          const { id, attributes } = response.data.data;
-
+          var { id, attributes, relationships } = response.data.data;
+          if (null !== relationships) {
+            for (const rel_name in relationships) {
+              const rel_attribs = relationships[rel_name];
+              if (Array.isArray(relationships[rel_name]?.data)) {
+                var rel_ids= [];
+                for (const many_relidx in relationships[rel_name].data) {
+                  const many_rel= relationships[rel_name].data[many_relidx];
+                  if (many_rel.id) {
+                    rel_ids += many_rel.id;
+                  }
+                }
+              } else {
+                const rel_id = relationships[rel_name]?.data?.id;
+                if (null !== rel_id) {
+                  attributes[rel_name]= rel_id;
+                }
+              }
+            }
+          }
           return {
             data: {
               id, ...attributes,
