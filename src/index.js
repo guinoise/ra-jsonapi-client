@@ -157,11 +157,32 @@ export default (apiUrl, userSettings = {}) => (type, resource, params) => {
       switch (type) {
         case GET_MANY:
         case GET_LIST: {
+          var datas= [];
+          for (const idx in response.data.data) {
+            var { id, attributes, relationships } = response.data.data[idx];
+            if (null !== relationships) {
+              for (const rel_name in relationships) {
+                const rel_attribs = relationships[rel_name];
+                if (Array.isArray(relationships[rel_name]?.data)) {
+                  var rel_ids= [];
+                  for (const many_relidx in relationships[rel_name].data) {
+                    const many_rel= relationships[rel_name].data[many_relidx];
+                    if (many_rel.id) {
+                      rel_ids += many_rel.id;
+                    }
+                  }
+                } else {
+                  const rel_id = relationships[rel_name]?.data?.id;
+                  if (null !== rel_id) {
+                    attributes[rel_name]= rel_id;
+                  }
+                }
+              }
+            }
+            datas+= {id, ...attributes}
+          }
           return {
-            data: response.data.data.map(value => Object.assign(
-              { id: value.id, relationships: value.relationships                                                     },
-              value.attributes,
-            )),
+            data: datas,
             total,
           };
         }
