@@ -168,7 +168,7 @@ export default (apiUrl, userSettings = {}) => (type, resource, params) => {
                   for (const many_relidx in relationships[rel_name].data) {
                     const many_rel= relationships[rel_name].data[many_relidx];
                     if (many_rel.id) {
-                      rel_ids += many_rel.id;
+                      rel_ids.push(many_rel.id);
                     }
                   }
                 } else {
@@ -178,8 +178,8 @@ export default (apiUrl, userSettings = {}) => (type, resource, params) => {
                   }
                 }
               }
+              datas.push({id, ...attributes});
             }
-            datas+= {id, ...attributes}
           }
           return {
             data: datas,
@@ -207,7 +207,7 @@ export default (apiUrl, userSettings = {}) => (type, resource, params) => {
                 for (const many_relidx in relationships[rel_name].data) {
                   const many_rel= relationships[rel_name].data[many_relidx];
                   if (many_rel.id) {
-                    rel_ids += many_rel.id;
+                    rel_ids.push(many_rel.id);
                   }
                 }
               } else {
