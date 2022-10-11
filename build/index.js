@@ -197,6 +197,8 @@ var _default = function _default(apiUrl) {
                         rel_ids.push(many_rel.id);
                       }
                     }
+
+                    attributes[rel_name] = rel_ids;
                   } else {
                     var _relationships$rel_na2, _relationships$rel_na3;
 
@@ -255,6 +257,8 @@ var _default = function _default(apiUrl) {
                       rel_ids.push(_many_rel.id);
                     }
                   }
+
+                  attributes[_rel_name] = rel_ids;
                 } else {
                   var _relationships$_rel_n2, _relationships$_rel_n3;
 
