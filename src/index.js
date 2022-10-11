@@ -171,6 +171,7 @@ export default (apiUrl, userSettings = {}) => (type, resource, params) => {
                       rel_ids.push(many_rel.id);
                     }
                   }
+		  attributes[rel_name]= rel_ids;
                 } else {
                   const rel_id = relationships[rel_name]?.data?.id;
                   if (null !== rel_id) {
@@ -210,6 +211,7 @@ export default (apiUrl, userSettings = {}) => (type, resource, params) => {
                     rel_ids.push(many_rel.id);
                   }
                 }
+		attributes[rel_name]= rel_ids;
               } else {
                 const rel_id = relationships[rel_name]?.data?.id;
                 if (null !== rel_id) {
